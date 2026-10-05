@@ -2,9 +2,10 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME   = "devops-portfolio"
-        AWS_REGION   = "ap-south-1a"
-        ECR_REGISTRY = "public.ecr.aws/j0h7e6b5/devops-portfolio"
+        IMAGE_NAME      = "devops-portfolio"
+        AWS_REGION      = "us-east-1" // ECR Public uses us-east-1
+        REGISTRY_ALIAS  = "j0h7e6b5"  // ECR Public Alias / Registry ID
+        ECR_REGISTRY    = "public.ecr.aws/j0h7e6b5/${IMAGE_NAME}"
     }
 
     stages {
@@ -38,9 +39,7 @@ pipeline {
 
         stage('Build Container Image') {
             steps {
-                sh '''
-                    docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} .
-                '''
+                sh "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} ."
             }
         }
 
@@ -53,29 +52,20 @@ pipeline {
                         passwordVariable: 'AWS_SECRET_ACCESS_KEY'
                     )
                 ]) {
-                    sh '''
-                        aws ecr-public get-login-password --region ${AWS_REGION} | \
-                        docker login --username AWS --password-stdin public.ecr.aws
-                    '''
+                    sh "aws ecr-public get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin public.ecr.aws"
                 }
             }
         }
 
         stage('Tag Container Image') {
             steps {
-                sh '''
-                    docker tag \
-                    ${IMAGE_NAME}:${BUILD_NUMBER} \
-                    ${ECR_REGISTRY}:${BUILD_NUMBER}
-                '''
+                sh "docker tag ${IMAGE_NAME}:${BUILD_NUMBER} ${ECR_REGISTRY}:${BUILD_NUMBER}"
             }
         }
 
         stage('Publish to Registry') {
             steps {
-                sh '''
-                    docker push ${ECR_REGISTRY}:${BUILD_NUMBER}
-                '''
+                sh "docker push ${ECR_REGISTRY}:${BUILD_NUMBER}"
             }
         }
 
@@ -88,11 +78,7 @@ pipeline {
                         passwordVariable: 'AWS_SECRET_ACCESS_KEY'
                     )
                 ]) {
-                    sh '''
-                        aws ecr-public describe-images \
-                        --repository-name ${IMAGE_NAME} \
-                        --region ${AWS_REGION}
-                    '''
+                    sh "aws ecr-public describe-images --repository-name ${IMAGE_NAME} --region ${AWS_REGION}"
                 }
             }
         }
