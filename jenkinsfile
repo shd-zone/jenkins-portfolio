@@ -1,11 +1,12 @@
+
 pipeline {
     agent any
 
     environment {
-        IMAGE_NAME      = "devops-portfolio"
-        AWS_REGION      = "us-east-1" // ECR Public uses us-east-1
-        REGISTRY_ALIAS  = "j0h7e6b5"  // ECR Public Alias / Registry ID
-        ECR_REGISTRY    = "public.ecr.aws/j0h7e6b5/${IMAGE_NAME}"
+        IMAGE_NAME   = "devops-portfolio"
+        AWS_REGION   = "ap-south-1"
+        AWS_ACCOUNT  = "849996548285"
+        ECR_REGISTRY = "${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME}"
     }
 
     stages {
@@ -52,7 +53,7 @@ pipeline {
                         passwordVariable: 'AWS_SECRET_ACCESS_KEY'
                     )
                 ]) {
-                    sh "aws ecr-public get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin public.ecr.aws"
+                    sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com"
                 }
             }
         }
@@ -78,7 +79,7 @@ pipeline {
                         passwordVariable: 'AWS_SECRET_ACCESS_KEY'
                     )
                 ]) {
-                    sh "aws ecr-public describe-images --repository-name ${IMAGE_NAME} --region ${AWS_REGION}"
+                    sh "aws ecr describe-images --repository-name ${IMAGE_NAME} --region ${AWS_REGION}"
                 }
             }
         }
@@ -86,7 +87,7 @@ pipeline {
 
     post {
         success {
-            echo 'Image Successfully Uploaded To ECR Public'
+            echo 'Image Successfully Uploaded To Private ECR Repository'
         }
 
         failure {
