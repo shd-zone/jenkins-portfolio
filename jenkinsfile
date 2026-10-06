@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -83,11 +82,27 @@ pipeline {
                 }
             }
         }
+
+        // --- AUTOMATIC DEPLOYMENT STAGE ---
+        stage('Deploy Application') {
+            steps {
+                script {
+                    echo "Deploying newly built image to container..."
+                    sh '''
+                        # Purana running container stop & remove karein (agar exists karta hai)
+                        docker rm -f my-portfolio || true
+
+                        # Nayi image se container port 8081 par deploy karein
+                        docker run -d --name my-portfolio -p 8081:80 ${IMAGE_NAME}:${BUILD_NUMBER}
+                    '''
+                }
+            }
+        }
     }
 
     post {
         success {
-            echo 'Image Successfully Uploaded To Private ECR Repository'
+            echo 'Image Successfully Uploaded To Private ECR Repository & App Deployed!'
         }
 
         failure {

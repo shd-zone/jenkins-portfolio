@@ -3,65 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevOps Portfolio</title>
+    <title>DevOps & Cloud Engineering Portfolio</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --accent-cyan: #38bdf8;
+            --accent-emerald: #10b981;
+            --accent-purple: #a855f7;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
         }
 
         body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 40%);
         }
 
-        .container {
-            text-align: center;
-            background: #1e293b;
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            max-width: 500px;
+        /* Glassmorphism Navigation Header */
+        header {
+            width: 100%;
+            max-width: 1100px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.4rem;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--accent-emerald);
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-emerald);
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        /* Main Container */
+        main {
+            max-width: 1100px;
             width: 90%;
+            margin: 3rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 3.5rem;
         }
 
-        h1 {
-            color: #38bdf8;
-            margin-bottom: 1rem;
-            font-size: 2.2rem;
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
         }
 
-        p {
-            color: #94a3b8;
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
+        .hero-tag {
+            color: var(--accent-cyan);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: rgba(56, 189, 248, 0.1);
+            padding: 0.3rem 0.9rem;
+            border-radius: 6px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, #ffffff 30%, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            max-width: 650px;
             line-height: 1.6;
         }
 
-        .status {
-            display: inline-block;
-            background-color: #10b981;
-            color: #ffffff;
-            padding: 0.5rem 1.2rem;
+        /* Metrics / Pipeline Showcase Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            color: var(--accent-cyan);
+            margin-bottom: 1.2rem;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Interactive Call To Action */
+        .cta-box {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+            border: 1px solid rgba(168, 85, 247, 0.3);
             border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent-cyan), #0284c7);
+            color: #ffffff;
+            font-weight: 600;
+            padding: 0.9rem 2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 20px -5px rgba(56, 189, 248, 0.4);
+            transition: all 0.25s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 15px 25px -5px rgba(56, 189, 248, 0.6);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>DevOps Portfolio</h1>
-        <p>Application successfully deployed using Jenkins CI/CD & Docker Pipeline!</p>
-        <span class="status">Status: Active & Running</span>
-    </div>
+    <!-- Header Navigation -->
+    <header>
+        <div class="logo"><i class="fa-solid fa-server"></i> DevOps.Engine</div>
+        <div class="status-badge">
+            <span class="pulse-dot"></span>
+            Pipeline Active
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <span class="hero-tag">Automated Deployment</span>
+            <h1><span>Next-Gen Cloud &</span><br>DevOps Infrastructure</h1>
+            <p>Automated zero-downtime CI/CD pipeline powered by Jenkins, SonarQube, Docker, and AWS ECR.</p>
+        </section>
+
+        <!-- Feature Grid Cards -->
+        <section class="grid-container">
+            <div class="card">
+                <div class="card-icon"><i class="fa-brands fa-jenkins"></i></div>
+                <h3>Automated CI/CD</h3>
+                <p>Seamless code testing, artifact creation, and deployment triggered instantly via GitHub Webhooks.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon"><i class="fa-brands fa-docker"></i></div>
+                <h3>Containerized App</h3>
+                <p>Isolated lightweight container execution using Docker & AWS Elastic Container Registry (ECR).</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3>Code Quality & Audit</h3>
+                <p>Static code analysis and security vulnerability scan with SonarQube automation.</p>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-box">
+            <h2>Ready to inspect the source code?</h2>
+            <p style="color: var(--text-muted); max-width: 500px;">Check out the full infrastructure codebase, Dockerfiles, and Jenkinsfile pipelines on GitHub.</p>
+            <a href="https://github.com/shd-zone/jenkins-portfolio" target="_blank" class="btn">
+                <i class="fa-brands fa-github"></i> View GitHub Repository
+            </a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Shaikh Shahid. Built with AWS, Jenkins & Docker.</p>
+    </footer>
 
 </body>
 </html>
